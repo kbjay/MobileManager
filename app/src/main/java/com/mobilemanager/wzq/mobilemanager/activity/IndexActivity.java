@@ -148,6 +148,7 @@ public class IndexActivity extends ActionBarActivity {
         intent.addCategory("android.intent.category.DEFAULT");
         intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
         startActivity(intent);
+//soutlog
     }
     //1111111111111111111111111111获取当前的版本号
     public float getCurrentVersion() {
