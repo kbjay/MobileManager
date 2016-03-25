@@ -4,5 +4,19 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
     </style>
-
+   <!-- android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#00FFFF"
+    android:gravity="center"
+    android:padding="15dp"
+    android:text="功能菜单"
+    android:textSize="30sp"-->
+    <style name="style_main_title">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:background">#00ffff</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">15dp</item>
+        <item name="android:textSize">30sp</item>
+    </style>
 </resources>

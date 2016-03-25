@@ -4,6 +4,7 @@ package com.mobilemanager.wzq.mobilemanager.activity;
 // 2：获取服务端版本（解析json），
 // 3：比较之后，提示用户时候更新，if选择更新，下载apk调用系统instalsser更新应用即可
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,10 +16,16 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
 import com.mobilemanager.wzq.mobilemanager.R;
+import com.mobilemanager.wzq.mobilemanager.application.MyApplication;
 import com.mobilemanager.wzq.mobilemanager.util.HttpUtils;
 
 import org.apache.http.Header;
@@ -37,23 +44,66 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-public class IndexActivity extends ActionBarActivity {
+public class IndexActivity extends Activity {
+    public static final int REQUEST_CODE_TO_INSTALLER=100;
+
     public static final int JSON_MES_OK = 1;
+    public static final int JSON_MES_URLEXCEPTION = -1;
+    public static final int JSON_MES_IOEXCEPTION = -2;
+    public static final int JSON_MES_JSONEXCETION = -3;
+
+    public static final int DOWN_ERROR_FILENOTFOUND = -4;
+    public static final int DOWN_ERROR_IOEXCEPTION= -5;
+
     private float mCurrentVersion;
 
     //从服务器拿到的更新版本的数据
+    //表示的是相对路径。
     public String mDownPath;
     public String mChangeInfo;
     public float mLatestVersion;
+    //表示绝对路径。
+    public String mDownUrl;
+    private TextView tv_index_versioncode;
+    private ProgressBar pb_index_downprogress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
+        setContentView(R.layout.activity_index);
+        tv_index_versioncode = (TextView) this.findViewById(R.id.tv_index_versioncode);
+        pb_index_downprogress = (ProgressBar) this.findViewById(R.id.pb_index_downprogress);
         mCurrentVersion = getCurrentVersion();
-        downJsonData();
 
+        tv_index_versioncode.setText("当前版本：" + mCurrentVersion);
+        mDownUrl= MyApplication.down_url;
+
+        //Q；实现根据autoupdate的值，来控制indexActivity的行为。
+        boolean isAutoUpdate= MyApplication.sp.getBoolean("autoupdate",true);
+        if(isAutoUpdate){
+            downJsonData();
+        }else{
+            //停留3s，跳转到mainActivity
+            waitToMian();
+        }
+    }
+    public void waitToMian(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(3000);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            intoMainPage();
+                        }
+                    });
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
     //33333333333333333333333333  获取json数据，并处理。
     Handler myHandler = new Handler() {
@@ -66,11 +116,24 @@ public class IndexActivity extends ActionBarActivity {
                     //获取最新的版本号，比较，if需要更新就更新
                     mLatestVersion = Float.parseFloat(hashMap.get("latestVersionName"));
                     mChangeInfo=hashMap.get("changeInfo");
-                    mDownPath=hashMap.get("downUrl");
+                    mDownPath=hashMap.get("downPath");
                     if (mLatestVersion > mCurrentVersion) {
                         alert_update();
                     }
                     break;
+                case JSON_MES_IOEXCEPTION:
+                    Toast.makeText(IndexActivity.this,msg.what+"",Toast.LENGTH_LONG).show();
+                    intoMainPage();
+                    break;
+                case JSON_MES_JSONEXCETION:
+                    Toast.makeText(IndexActivity.this,msg.what+"",Toast.LENGTH_LONG).show();
+                    intoMainPage();
+                    break;
+                case JSON_MES_URLEXCEPTION:
+                    Toast.makeText(IndexActivity.this,msg.what+"",Toast.LENGTH_LONG).show();
+                    intoMainPage();
+                    break;
+
             }
 
         }
@@ -83,13 +146,15 @@ public class IndexActivity extends ActionBarActivity {
                 .setPositiveButton("确认更新", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        System.out.println("==============gengxin================");
                         downNewVersion();
                     }
                 })
                 .setNegativeButton("稍后再说", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
+                        System.out.println("==============稍后再说gengxin================");
+                        intoMainPage();
                     }
                 })
                 .show();
@@ -97,9 +162,21 @@ public class IndexActivity extends ActionBarActivity {
     }
     //55555555555555555555555555555用户选择更新之后，下载数据，下载成功提示安装，失败toast用户
     public void downNewVersion(){
-        //根据mDownPath下载最新的apk
+        pb_index_downprogress.setVisibility(View.VISIBLE);
+
+        //根据mDownUrl+mDownPath下载最新的apk
         AsyncHttpClient client = new AsyncHttpClient();
-        client.get(mDownPath, new AsyncHttpResponseHandler() {
+
+        System.out.println(mDownUrl+mDownPath+"-----------------------------");
+
+        client.get(mDownUrl + mDownPath, new AsyncHttpResponseHandler() {
+
+            @Override
+            public void onProgress(int bytesWritten, int totalSize) {
+                super.onProgress(bytesWritten, totalSize);
+                pb_index_downprogress.setMax(totalSize);
+                pb_index_downprogress.setProgress(bytesWritten);
+            }
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 final File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/MobileManager.apk");
@@ -110,7 +187,7 @@ public class IndexActivity extends ActionBarActivity {
                     //通知用户安装完成
                     new AlertDialog.Builder(IndexActivity.this)
                             .setTitle("下载完成")
-                            .setTitle("是否安装")
+                            .setMessage("是否安装?")
                             .setPositiveButton("确认安装", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -119,36 +196,52 @@ public class IndexActivity extends ActionBarActivity {
                             })
                             .setNegativeButton("稍后再说", new DialogInterface.OnClickListener() {
                                 @Override
-                                public void onClick(DialogInterface dialog, int which) {
 
+                                public void onClick(DialogInterface dialog, int which) {
+                                    intoMainPage();
                                 }
                             })
                             .show();
-                   /* Intent intent = new Intent();
-                    intent.setAction("android.intent.action.VIEW");
-                    intent.addCategory("android.intent.category.DEFAULT");
-                    intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
-                    startActivity(intent);*/
                 } catch (FileNotFoundException e) {
+                    Toast.makeText(IndexActivity.this, DOWN_ERROR_FILENOTFOUND + "", Toast.LENGTH_LONG).show();
+                    intoMainPage();
                     e.printStackTrace();
                 } catch (IOException e) {
+                    Toast.makeText(IndexActivity.this, DOWN_ERROR_IOEXCEPTION + "", Toast.LENGTH_LONG).show();
+                    intoMainPage();
                     e.printStackTrace();
                 }
-
             }
+
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                intoMainPage();
             }
         });
     }
 
+    public void intoMainPage(){
+        //
+        Intent intent=new Intent(this,MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
     public void installNewVersion(File file){
         Intent intent = new Intent();
         intent.setAction("android.intent.action.VIEW");
         intent.addCategory("android.intent.category.DEFAULT");
         intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
-        startActivity(intent);
-//soutlog
+        startActivityForResult(intent, REQUEST_CODE_TO_INSTALLER);
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode==REQUEST_CODE_TO_INSTALLER){
+            switch (resultCode){
+                case RESULT_CANCELED:
+                    intoMainPage();
+                    break;
+            }
+        }
     }
     //1111111111111111111111111111获取当前的版本号
     public float getCurrentVersion() {
@@ -171,7 +264,9 @@ public class IndexActivity extends ActionBarActivity {
             @Override
             public void run() {
                 super.run();
-                String path = "http://192.168.3.34/MobileMamagerServer/versionInfo.txt";
+                Message message = myHandler.obtainMessage();
+                String path = mDownUrl+"/versionInfo.txt";
+                System.out.println(path+"=================================");
                 try {
                     URL url = new URL(path);
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -190,28 +285,28 @@ public class IndexActivity extends ActionBarActivity {
                         JSONObject jsonObject = new JSONObject(jsonString);
                         String latestVersionName = jsonObject.getString("versionName");
                         String changeInfo = jsonObject.getString("changeInfo");
-                        String downUrl = jsonObject.getString("downUrl");
+                        String downPath = jsonObject.getString("downPath");
                         Map<String, String> map = new HashMap<String, String>();
                         map.put("latestVersionName", latestVersionName);
                         map.put("changeInfo", changeInfo);
-                        map.put("downUrl", downUrl);
+                        map.put("downPath", downPath);
 
-                        Message message = myHandler.obtainMessage();
                         message.what = JSON_MES_OK;
                         message.obj = map;
-                        myHandler.sendMessage(message);
                     }
                 } catch (MalformedURLException e) {
+                    message.what=JSON_MES_URLEXCEPTION;
                     e.printStackTrace();
                 } catch (IOException e) {
+                    message.what=JSON_MES_IOEXCEPTION;
                     e.printStackTrace();
                 } catch (JSONException e) {
+                    message.what=JSON_MES_JSONEXCETION;
                     e.printStackTrace();
                 }
+                myHandler.sendMessage(message);
             }
         }.start();
-
-
     }
 
 }

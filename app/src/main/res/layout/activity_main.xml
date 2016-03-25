@@ -5,8 +5,26 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".activity.IndexActivity"
-    android:background="@drawable/icon1">
+    tools:context="com.mobilemanager.wzq.mobilemanager.activity.MainActivity">
 
-
+    <TextView
+        style="@style/style_main_title"
+        android:text="功能菜单"
+        />
+    <TextView
+        android:id="@+id/tv_main_welcome"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="marquee"
+        android:padding="5sp"
+        android:singleLine="true"
+        android:text="欢迎你，欢迎你，欢迎你，欢迎你，欢迎你，欢迎你，欢迎你，欢迎你，"
+        />
+    <GridView
+        android:id="@+id/gv_main_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:numColumns="3">
+    </GridView>
 </LinearLayout>

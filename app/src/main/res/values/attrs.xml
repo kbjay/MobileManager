@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="MySettingView">
+        <attr name="choice" format="string"></attr>
+        <attr name="chooseState" format="string"></attr>
+        <attr name="unchooseState" format="string"></attr>
+        <attr name="keyInConfig" format="string"></attr>
+    </declare-styleable>
+</resources>

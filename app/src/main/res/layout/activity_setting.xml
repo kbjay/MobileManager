@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:mysettingitem="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.mobilemanager.wzq.mobilemanager.activity.SettingActivity">
+    <TextView
+        style="@style/style_main_title"
+        android:text="设置中心"/>
+    <com.mobilemanager.wzq.mobilemanager.view.MySettingView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        mysettingitem:choice="自动更新"
+        mysettingitem:chooseState="自动更新开启"
+        mysettingitem:unchooseState="自动更新关闭"
+        mysettingitem:keyInConfig="autoupdate"
+        >
+    </com.mobilemanager.wzq.mobilemanager.view.MySettingView>
+</LinearLayout>
