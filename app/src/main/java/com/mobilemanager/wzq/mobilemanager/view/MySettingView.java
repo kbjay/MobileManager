@@ -29,6 +29,19 @@ public class MySettingView extends LinearLayout implements View.OnClickListener{
     private String keyInConfig;
 
 
+    private MyOnClicklistener myOnClicklistener;
+
+    public interface MyOnClicklistener{
+        void myOnClick();
+        void myCancelClick();
+    }
+
+    public void setMyOnclickListener(MyOnClicklistener listener){
+        myOnClicklistener=listener;
+    }
+
+
+
     public MySettingView(Context context) {
         super(context);
         init(null);
@@ -38,8 +51,6 @@ public class MySettingView extends LinearLayout implements View.OnClickListener{
         setOnClickListener(this);
         //获取处理config文件的editor
         edit = MyApplication.sp.edit();
-
-
         init(attrs);
     }
     public void init (AttributeSet attrs){
@@ -52,8 +63,9 @@ public class MySettingView extends LinearLayout implements View.OnClickListener{
         chooseState = attrs.getAttributeValue("http://schemas.android.com/apk/res-auto", "chooseState");
         unchooseState = attrs.getAttributeValue("http://schemas.android.com/apk/res-auto", "unchooseState");
         keyInConfig = attrs.getAttributeValue("http://schemas.android.com/apk/res-auto", "keyInConfig");
+
         //是否自动更新由config文件决定
-        defaultState = MyApplication.sp.getBoolean("autoupdate",true);
+        defaultState = MyApplication.sp.getBoolean(keyInConfig,false);
 
         tv_setting_choice.setText(choice);
         if(defaultState){
@@ -75,11 +87,17 @@ public class MySettingView extends LinearLayout implements View.OnClickListener{
            cb_setting_changestate.setChecked(false);
            edit.putBoolean(keyInConfig, false);
            edit.commit();
+           if(myOnClicklistener!=null){
+               myOnClicklistener.myOnClick();
+           }
        }else{
            tv_setting_state.setText(chooseState);
            cb_setting_changestate.setChecked(true);
            edit.putBoolean(keyInConfig,true);
            edit.commit();
+           if(myOnClicklistener!=null){
+               myOnClicklistener.myCancelClick();
+           }
        }
     }
 }

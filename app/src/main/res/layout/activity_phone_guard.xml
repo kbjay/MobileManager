@@ -1,13 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
     tools:context="com.mobilemanager.wzq.mobilemanager.activity.PhoneGuardActivity">
+    <TextView
+        style="@style/style_main_title"
+        android:text="手机防盗"
+        />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="安全号码"
+            />
+        <TextView
+            android:id="@+id/tv_phoneguard_safenumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="防盗功能是否开启"
+            />
+        <ImageView
+            android:id="@+id/iv_phoneguard_state"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentRight="true"
 
-</RelativeLayout>
+            />
+    </RelativeLayout>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="reset"
+
+        android:text="重新设置"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:text="功能简介"
+
+        android:background="#C0C0C0"/>
+    <TextView
+      style="@style/style_phoneguard_intro"
+        android:text="GPS追踪#*location*#"
+       />
+    <TextView
+        style="@style/style_phoneguard_intro"
+        android:text="播放报警音乐#*alarm*#"
+       />
+    <TextView
+        style="@style/style_phoneguard_intro"
+        android:text="远程删除数据#*wipedata*#"
+        />
+    <TextView
+        style="@style/style_phoneguard_intro"
+        android:text="远程锁屏#*lockscreen*#"
+        />
+</LinearLayout>

@@ -6,4 +6,8 @@
         <attr name="unchooseState" format="string"></attr>
         <attr name="keyInConfig" format="string"></attr>
     </declare-styleable>
+
+    <declare-styleable name="MySetupTurnView">
+        <attr name="pageNumber" format="integer"></attr>
+    </declare-styleable>
 </resources>

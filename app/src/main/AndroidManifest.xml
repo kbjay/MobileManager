@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <application
         android:name=".application.MyApplication"
         android:allowBackup="true"
@@ -24,7 +24,23 @@
         </activity>
         <activity android:name=".activity.SettingActivity">
         </activity>
-        <activity android:name=".activity.PhoneGuardActivity">
+        <activity android:name=".activity.PhoneGuardActivity"
+            android:launchMode="singleTask">
+        </activity>
+        <activity
+            android:name=".activity.PGsetup1Activity"
+            android:launchMode="singleTask">
+        </activity>
+        <activity
+            android:name=".activity.PGsetup2Activity"
+            android:launchMode="singleTask">
+        </activity>
+        <activity
+            android:name=".activity.PGsetup3Activity"
+            android:launchMode="singleTask">
+        </activity>
+        <activity android:name=".activity.PGsetup4Activity"
+            android:launchMode="singleTask">
         </activity>
     </application>
 

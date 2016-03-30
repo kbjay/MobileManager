@@ -19,4 +19,38 @@
         <item name="android:padding">15dp</item>
         <item name="android:textSize">30sp</item>
     </style>
+
+
+    <!--<TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@android:drawable/star_big_on"
+        android:gravity="center_vertical"
+        android:text="sim卡变更报警"
+        android:textSize="20sp"
+        />-->
+    <style name="style_PGsetup_item">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:drawableLeft">@android:drawable/star_big_on</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+   <!-- <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="GPS追踪#*location*#"
+        android:gravity="center_vertical"
+        android:layout_marginTop="10dp"
+        android:drawableLeft="@android:drawable/star_big_off"/>-->
+    <style name="style_phoneguard_intro">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:drawableLeft">@android:drawable/star_big_off</item>
+    </style>
+
+
 </resources>

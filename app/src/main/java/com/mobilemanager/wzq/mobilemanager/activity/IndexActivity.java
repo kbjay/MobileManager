@@ -69,6 +69,10 @@ public class IndexActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+     
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_index);
         tv_index_versioncode = (TextView) this.findViewById(R.id.tv_index_versioncode);
@@ -265,8 +269,8 @@ public class IndexActivity extends Activity {
             public void run() {
                 super.run();
                 Message message = myHandler.obtainMessage();
-                String path = mDownUrl+"/versionInfo.txt";
-                System.out.println(path+"=================================");
+                String path = mDownUrl + "/versionInfo.txt";
+                System.out.println(path + "=================================");
                 try {
                     URL url = new URL(path);
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -295,18 +299,17 @@ public class IndexActivity extends Activity {
                         message.obj = map;
                     }
                 } catch (MalformedURLException e) {
-                    message.what=JSON_MES_URLEXCEPTION;
+                    message.what = JSON_MES_URLEXCEPTION;
                     e.printStackTrace();
                 } catch (IOException e) {
-                    message.what=JSON_MES_IOEXCEPTION;
+                    message.what = JSON_MES_IOEXCEPTION;
                     e.printStackTrace();
                 } catch (JSONException e) {
-                    message.what=JSON_MES_JSONEXCETION;
+                    message.what = JSON_MES_JSONEXCETION;
                     e.printStackTrace();
                 }
                 myHandler.sendMessage(message);
             }
         }.start();
     }
-
 }
