@@ -2,10 +2,15 @@
 <manifest package="com.mobilemanager.wzq.mobilemanager"
           xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.SEND_SMS"/>
+    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
+
     <application
         android:name=".application.MyApplication"
         android:allowBackup="true"
@@ -24,7 +29,8 @@
         </activity>
         <activity android:name=".activity.SettingActivity">
         </activity>
-        <activity android:name=".activity.PhoneGuardActivity"
+        <activity
+            android:name=".activity.PhoneGuardActivity"
             android:launchMode="singleTask">
         </activity>
         <activity
@@ -39,8 +45,56 @@
             android:name=".activity.PGsetup3Activity"
             android:launchMode="singleTask">
         </activity>
-        <activity android:name=".activity.PGsetup4Activity"
+        <activity
+            android:name=".activity.PGsetup4Activity"
             android:launchMode="singleTask">
+        </activity>
+
+        <receiver android:name=".receiver.MyBroadCastReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".receiver.MyBroadCastSmsReceiver">
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name=".Service.MyLocationService"
+            android:enabled="true"
+            android:exported="true">
+        </service>
+
+        <receiver
+            android:name=".receiver.MyDeviceAdminReceiver"
+            android:description="@string/sample_device_admin_description"
+            android:label="@string/sample_device_admin"
+            android:permission="android.permission.BIND_DEVICE_ADMIN">
+            <meta-data
+                android:name="android.app.device_admin"
+                android:resource="@xml/device_admin_sample"/>
+
+            <intent-filter>
+                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED"/>
+            </intent-filter>
+        </receiver>
+
+        <activity android:name=".activity.SoftManagerActivity">
+        </activity>
+
+        <provider
+            android:name=".contentProvider.MyDbProvider"
+            android:authorities="com.wzq.dbmessage"/>
+
+        <service
+            android:name=".Service.MyAppLockService"
+            android:enabled="true"
+            android:exported="true">
+        </service>
+
+        <activity android:name=".activity.LockActivity">
         </activity>
     </application>
 

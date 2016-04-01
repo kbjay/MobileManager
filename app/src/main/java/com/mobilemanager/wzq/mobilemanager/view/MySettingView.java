@@ -88,7 +88,7 @@ public class MySettingView extends LinearLayout implements View.OnClickListener{
            edit.putBoolean(keyInConfig, false);
            edit.commit();
            if(myOnClicklistener!=null){
-               myOnClicklistener.myOnClick();
+               myOnClicklistener.myCancelClick();
            }
        }else{
            tv_setting_state.setText(chooseState);
@@ -96,7 +96,7 @@ public class MySettingView extends LinearLayout implements View.OnClickListener{
            edit.putBoolean(keyInConfig,true);
            edit.commit();
            if(myOnClicklistener!=null){
-               myOnClicklistener.myCancelClick();
+               myOnClicklistener.myOnClick();
            }
        }
     }

@@ -71,6 +71,7 @@ public class MainActivity extends ActionBarActivity {
                     case 1:
                         break;
                     case 2:
+                        softManage();
                         break;
                     case 3:
                         break;
@@ -88,11 +89,17 @@ public class MainActivity extends ActionBarActivity {
                         break;
                 }
             }
+
+
         });
 
     }
 
 
+    //软件管理
+    public  void softManage() {
+        startActivity(new Intent(this,SoftManagerActivity.class));
+    }
     //1：需要判断是否是第一次点击
     // 2：需要自定义dialog
     // 3：需要利用md5，将密码写入sharedprence
