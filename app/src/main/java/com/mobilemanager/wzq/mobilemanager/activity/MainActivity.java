@@ -22,7 +22,11 @@ import android.widget.Toast;
 import com.mobilemanager.wzq.mobilemanager.R;
 import com.mobilemanager.wzq.mobilemanager.application.MyApplication;
 import com.mobilemanager.wzq.mobilemanager.util.Md5Utils;
-
+/**
+*
+*@author wzq
+*created at 2016/4/8 0:09
+*/
 public class MainActivity extends ActionBarActivity {
 
     public static final int NUM_GRID_ITEMS = 9;
@@ -69,19 +73,24 @@ public class MainActivity extends ActionBarActivity {
                         setAppPassWord();
                         break;
                     case 1:
+                        communicationManager();
                         break;
                     case 2:
                         softManage();
                         break;
                     case 3:
+                        processManage();
                         break;
                     case 4:
                         break;
                     case 5:
+                        killVirusManage();
                         break;
                     case 6:
+                        cleanCacheManage();
                         break;
                     case 7:
+                        locationCheckManager();
                         break;
                     case 8:
                         //设置
@@ -93,6 +102,28 @@ public class MainActivity extends ActionBarActivity {
 
         });
 
+    }
+
+    private void locationCheckManager() {
+        startActivity(new Intent(this,LocationCheckActivity.class));
+
+    }
+
+    private void communicationManager() {
+        startActivity(new Intent(this,CommunicationActivity.class));
+
+    }
+
+    private void cleanCacheManage() {
+        startActivity(new Intent(this,CleanCacheActivity.class));
+    }
+
+    private void killVirusManage() {
+        startActivity(new Intent(this,KillVirusActivity.class));
+    }
+
+    private void processManage() {
+        startActivity(new Intent(this,ProcessActivity.class));
     }
 
 

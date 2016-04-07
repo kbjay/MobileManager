@@ -19,4 +19,18 @@
         mysettingitem:keyInConfig="autoupdate"
         >
     </com.mobilemanager.wzq.mobilemanager.view.MySettingView>
+    <com.mobilemanager.wzq.mobilemanager.view.MySettingView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        mysettingitem:choice="归属地查询"
+        mysettingitem:chooseState="归属地查询开启"
+        mysettingitem:unchooseState="归属地查询关闭"
+        mysettingitem:keyInConfig="autocheck"
+        >
+    </com.mobilemanager.wzq.mobilemanager.view.MySettingView>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="设置toast的位置"
+        android:onClick="changeLocation"/>
 </LinearLayout>

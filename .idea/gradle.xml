@@ -12,6 +12,7 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/text" />
+            <option value="$PROJECT_DIR$/widgetdemo" />
           </set>
         </option>
       </GradleProjectSettings>

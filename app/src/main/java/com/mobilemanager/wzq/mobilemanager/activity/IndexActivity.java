@@ -1,8 +1,4 @@
 package com.mobilemanager.wzq.mobilemanager.activity;
-//实现版本更新。
-// 1：获取当前版本，
-// 2：获取服务端版本（解析json），
-// 3：比较之后，提示用户时候更新，if选择更新，下载apk调用系统instalsser更新应用即可
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -25,8 +21,10 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
 import com.mobilemanager.wzq.mobilemanager.R;
+import com.mobilemanager.wzq.mobilemanager.Service.MyPhoneListenService;
 import com.mobilemanager.wzq.mobilemanager.application.MyApplication;
 import com.mobilemanager.wzq.mobilemanager.util.HttpUtils;
+import com.mobilemanager.wzq.mobilemanager.util.KillVirusUtils;
 
 import org.apache.http.Header;
 import org.json.JSONException;
@@ -43,7 +41,14 @@ import java.net.URL;
 
 import java.util.HashMap;
 import java.util.Map;
-
+/**
+*实现版本更新。
+ * 1：获取当前版本，
+ *2：获取服务端版本（解析json），
+* 3：比较之后，提示用户时候更新，if选择更新，下载apk调用系统instalsser更新应用即可
+ *@author wzq
+*created at 2016/4/8 0:05
+*/
 public class IndexActivity extends Activity {
     public static final int REQUEST_CODE_TO_INSTALLER=100;
 
@@ -67,11 +72,9 @@ public class IndexActivity extends Activity {
     private TextView tv_index_versioncode;
     private ProgressBar pb_index_downprogress;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-     
-
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_index);
@@ -80,8 +83,10 @@ public class IndexActivity extends Activity {
         mCurrentVersion = getCurrentVersion();
 
         tv_index_versioncode.setText("当前版本：" + mCurrentVersion);
-        mDownUrl= MyApplication.down_url;
+        //离线归属地的db的转移
+        KillVirusUtils.transDbFromAssets(this,"telocation.db");
 
+        mDownUrl= MyApplication.down_url;
         //Q；实现根据autoupdate的值，来控制indexActivity的行为。
         boolean isAutoUpdate= MyApplication.sp.getBoolean("autoupdate",true);
         if(isAutoUpdate){
